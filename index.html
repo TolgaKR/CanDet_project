@@ -519,7 +519,7 @@
             }
         }
 
-        /* Animasyonlar */
+
         @keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -539,8 +539,6 @@
             animation: fadeInUp 0.8s ease;
             animation-delay: calc(var(--delay) * 0.1s);
         }
-
-        /* Pulse efekti */
         @keyframes pulse {
             0%, 100% { opacity: 1; }
             50% { opacity: 0.7; }
@@ -633,9 +631,9 @@
 
     <script>
         let selectedFile = null;
-        const API_URL = 'http://localhost:5000'; // Flask API URL'i
+        const API_URL = 'http://localhost:5000';  //FLASK API URL
 
-        // DOM elementleri
+
         const fileInput = document.getElementById('fileInput');
         const uploadSection = document.getElementById('uploadSection');
         const previewSection = document.getElementById('previewSection');
@@ -649,7 +647,6 @@
         const originalImage = document.getElementById('originalImage');
         const processedImage = document.getElementById('processedImage');
 
-        // Event listeners
         fileInput.addEventListener('change', handleFileSelect);
         uploadSection.addEventListener('dragover', handleDragOver);
         uploadSection.addEventListener('dragleave', handleDragLeave);
@@ -716,7 +713,6 @@
                 return;
             }
 
-            // UI durumunu güncelle
             analyzeBtn.disabled = true;
             analyzeBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Analiz Ediliyor...';
             loadingSection.style.display = 'block';
@@ -724,11 +720,11 @@
             hideResults();
 
             try {
-                // FormData oluştur
+
                 const formData = new FormData();
                 formData.append('file', selectedFile);
 
-                // API'ye istek gönder
+
                 const response = await fetch(`${API_URL}/predict`, {
                     method: 'POST',
                     body: formData
@@ -750,7 +746,7 @@
                 console.error('Analiz hatası:', error);
                 showError(`Analiz sırasında hata oluştu: ${error.message}`);
             } finally {
-                // UI durumunu resetle
+
                 analyzeBtn.disabled = false;
                 analyzeBtn.innerHTML = '<i class="fas fa-search"></i> Analiz Et';
                 loadingSection.style.display = 'none';
@@ -760,7 +756,6 @@
         function displayResults(result) {
             const predictions = result.predictions || [];
 
-            // İşlenmiş görüntüyü göster
             if (result.marked_image_base64) {
                 processedImage.src = `data:image/jpeg;base64,${result.marked_image_base64}`;
                 imageComparison.style.display = 'grid';
@@ -836,7 +831,6 @@
             resultsContent.innerHTML = resultsHTML;
             resultsSection.style.display = 'block';
 
-            // Sonuçları göstermek için yumuşak kaydırma
             resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
@@ -854,11 +848,10 @@
             imageComparison.style.display = 'none';
         }
 
-        // Demo modu - API olmadığında test için
         window.demoMode = false;
 
         function generateDemoResults() {
-            const hasMelanoma = Math.random() > 0.7; // %30 ihtimalle melanoma var
+            const hasMelanoma = Math.random() > 0.7;
 
             if (hasMelanoma) {
                 return {
@@ -870,7 +863,7 @@
                             box: [120, 80, 250, 180]
                         }
                     ],
-                    marked_image_base64: null // Demo'da işaretli görüntü yok
+                    marked_image_base64: null
                 };
             } else {
                 return {
@@ -881,7 +874,6 @@
             }
         }
 
-        // API bağlantısı başarısız olursa demo moduna geç
         async function analyzeImageWithFallback() {
             try {
                 await analyzeImage();
@@ -890,7 +882,6 @@
                     console.log('API\'ye bağlanılamadı, demo moda geçiliyor...');
                     window.demoMode = true;
 
-                    // Demo sonuçları göster
                     setTimeout(() => {
                         const demoResult = generateDemoResults();
                         displayResults(demoResult);
@@ -904,7 +895,6 @@
             }
         }
 
-        // Analyze butonunu demo fallback ile değiştir
         analyzeBtn.removeEventListener('click', analyzeImage);
         analyzeBtn.addEventListener('click', analyzeImageWithFallback);
     </script>
